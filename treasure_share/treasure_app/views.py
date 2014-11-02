@@ -1,7 +1,7 @@
 from django.shortcuts import render, render_to_response, redirect
 from django.template import RequestContext
-from treasure.models import Donation, Dribble, Recipients, Profile
-from . import treasure, profile, dribble
+from treasure_app.models import Donation, Dribble, Recipients, Profile
+import treasure, profile, dribble
 from django.http import HttpResponse
 
 from oauth2client.client import OAuth2WebServerFlow

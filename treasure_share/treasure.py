@@ -1,5 +1,5 @@
 from datetime import date, timedelta
-import keyfuncs, multisig
+import key_funcs, multisig
 
 class Donation:
     def __init__(self, donor, charities, initial_amount, dribble):

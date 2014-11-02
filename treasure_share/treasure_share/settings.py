@@ -35,7 +35,7 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = (
-    'treasure',
+    'treasure_app',
     'sslserver',
     'django.contrib.admin',
     'django.contrib.auth',

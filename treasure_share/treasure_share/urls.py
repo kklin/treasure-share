@@ -1,6 +1,6 @@
 from django.conf.urls import patterns, include, url
 from django.contrib import admin
-from treasure import views
+from treasure_app import views
 
 urlpatterns = patterns('',
     # Examples:
