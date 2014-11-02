@@ -447,7 +447,7 @@ class CoinbaseAccount(object):
         return response_parsed
 
     def send_signatures(self, signatures, transaction_id):
-	url = 'https://api.coinbase.com/v1/transactions/' + transaction_id + '/sighashes'
+	url = 'https://api.coinbase.com/v1/transactions/' + transaction_id + '/signatures'
 	request_data = {
 	    'signatures': [
 		{ 'position': 1,
@@ -457,6 +457,18 @@ class CoinbaseAccount(object):
 	}
 
 	response = self.session.put(url=url, data=json.dumps(request_data))
+	response_parsed = response.json()
+	return response_parsed
+
+    def get_sighashes(self, transaction_id, account_id):
+	url = "https://api.coinbase.com/v1/transactions/" + transaction_id + "/sighashes"
+
+	request_data = {
+		'account_id': account_id,
+	}
+
+	response = self.session.get(url=url, data=json.dumps(request_data))
+#	response = self.session.put(url=url)
 	response_parsed = response.json()
 	return response_parsed
 
@@ -504,6 +516,7 @@ class CoinbaseAccount(object):
 
         response = self.session.post(url=url, data=json.dumps(request_data))
         response_parsed = response.json()
+	print(response_parsed)
 
         if not response_parsed.get('success'):
             raise CoinbaseError('Failed to send btc.',

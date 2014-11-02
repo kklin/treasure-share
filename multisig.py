@@ -15,7 +15,7 @@ def multisig_create_and_transfer(account, keys, amount, note=""):
 	return address
 
 def multisig_send_from(account, keys, account_id, address, amount, note = ""):
-	send_response = account.send_from_multisig(from_address = account_id, to_address = address, amount = CoinbaseAmount(amount, "USD"), note = note)
+	send_response = account.send_from_multisig(to_address = address, amount = CoinbaseAmount(amount, "USD"), note = note)
 	print(send_response)
 	sighash = send_response['transaction']['inputs']['sighash']
 	required_sigs = []
