@@ -40,6 +40,9 @@ def multisig_send_from(keys, account_id, address):
 	print(send_response)
 	transaction_id = send_response['transaction']['id']
 	time.sleep(5) # gotta let the transaction freaking propogate
+	multisig_sign_from_transaction(transaction_id, account_id)
+
+def multisig_sign_from_transaction(transaction_id, account_id):
 	sighashes = get_sighashes(transaction_id, account_id)
 	print(sighashes)
 	sighash = sighashes['transaction']['inputs'][0]['input']['sighash']
@@ -47,10 +50,10 @@ def multisig_send_from(keys, account_id, address):
 	for addresses in sighashes['transaction']['inputs'][0]['input']['address']['addresses']:
 		required_sigs.append( { 'address': addresses['address']['address'],
 					'sighash': sighash,
-					'level': addresses['address']['node_path'][-1]
+					'level': int(addresses['address']['node_path'][-1])
 				      } )
 	sigs = sign_addresses(keys, required_sigs)
-	account.put_signatures(sigs)
+	print(account.send_signatures(sigs, transaction_id))
 
 def sign_addresses(keys, required_sigs):
 	key_vals = keys.values()
@@ -69,7 +72,8 @@ def get_sighashes(transaction_id, account_id):
 keys = make_keys(2)
 #transaction = account.transactions(count=30)[0]
 #print(get_sighashes('545644aed602e6abcd00001e', '5456289bd42011781000000a'))
-multisig_send_from(keys, '5456289bd42011781000000a', 'gordonmslai@gmail.com')
+multisig_send_from(keys, '545648c0fbb87d1c7a000030', 'gordonmslai@gmail.com')
+#multisig_sign_from_transaction("54566227abbd31121000000c", "545648c0fbb87d1c7a000030")
 #print(get_sighashes('54563b870b6947bddb000012'))
 # required_sigs = [ { 'address': '17rayYCwAPsoxqokhpDeW5whXENWKrtfdk',
 # 		    'sighash': '1000',

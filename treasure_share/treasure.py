@@ -10,25 +10,25 @@ class Donation:
         self.creation_time = date.today()
 
 	self._account = multisig.get_account(oauth_token)
-	self._donor = self_account.receive_address()
-        self.multisig_address = create_wallet()
-        notify_charities()
+	self._donor = self._account.receive_address()
+        self.multisig_address = self.create_wallet()
+        self.notify_charities()
         print("Donation made")
 
     # creates a multisig wallet and returns the address of the wallet
     def create_wallet(self):
-	return multisig.create_and_transfer(account = _account, keys = _keys, amount = amount, note = "Donation :)")
+	return multisig.multisig_create_and_transfer(account = self._account, keys = self._keys, amount = self.amount, note = "Donation :)")
 
     # distributes the keys
     def notify_charities(self):
-        for i, charity in enumerate(_charities):
-            notify_charity(charity, _keys.values[i])
+        for i, charity in enumerate(self._charities):
+            self.notify_charity(charity, self._keys[i])
 
     def notify_charity(self, charity, key):
         # email(notify_charity_template(charity_name, key))
-        print(notify_charity_template(charity, key))
+        print(self.notify_charity_template(charity, key))
 
-    def notify_charity_template(charity, key):
+    def notify_charity_template(self, charity, key):
         template = '''
                     Hey $charity_name!
                     $donor_name has decided to donate $amount BTC to you, but this money
@@ -47,14 +47,15 @@ class Donation:
                     Much love,
                     Treasure Share
                    '''
-        template_values[charity_name] = charity.name
-        template_values[donor_name] = _donor.name
-        template_values[amount] = amount
-        template_values[other_charities] = " ".join(_charities.remove(charity_name))
-        template_values[delay] = _dribble.delay
-        template_values[dribble] = _dribble.percentage*100 + "% / " + _dribble.frequency
-        template_values[key] = key
-        template_values[wallet] = _wallet_id
+	template_values = {}
+        template_values['charity_name'] = charity.name
+        template_values['donor_name'] = self._donor
+        template_values['amount'] = self.amount
+        template_values['other_charities'] = " ".join(self._charities.remove(charity))
+        template_values['delay'] = self._dribble.delay
+        template_values['dribble'] = self._dribble.percentage*100 + "% / " + self._dribble.frequency
+        template_values['key'] = key
+        template_values['wallet'] = self.multisig_address
         return string.Template(template).substitute(template_values) % template_values
 
     def get_dribble(self):
@@ -62,7 +63,7 @@ class Donation:
 
     def apply_dribble(self):
 	dribble_amount = _dribble.percentage * amount
-	multisig.multisig_send_from(keys = _keys, account_id = multisig_address, address = donor, amount = dribble_amount, note = "Dribbling back..", account = _account)
+	multisig.multisig_send_from(account = _account, keys = _keys, account_id = multisig_address, address = donor, amount = dribble_amount, note = "Dribbling back..")
         new_amount = amount * (1 - _dribble.percentage)
         amount = new_amount
         donation.last_dribbled = date.today()

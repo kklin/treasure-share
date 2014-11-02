@@ -4,6 +4,7 @@ import binascii
 from hashlib import sha256
 from ecdsa2 import SigningKey, SECP256k1
 from ecdsa2.util import sigencode_der
+import os
 
 # from hdwallet.curves import *
 from hdwallet import HDWallet 
@@ -17,7 +18,7 @@ def make_keys(n):
 	for _ in range(n):
 		seed = os.urandom(256/8)
 		#seed = test_seeds[_]
-		key = key_funcs.make_key(seed)
+		key = make_key(seed)
 		#key_address = key.address()
 		#keys[key_address] = key
 		keys.append(key)
