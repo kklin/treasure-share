@@ -6,7 +6,7 @@ from coinbase.models.amount import CoinbaseAmount
 from secrets import OAUTH_TOKEN
 
 account = CoinbaseAccount(oauth2_credentials=OAUTH_TOKEN)
-test_seeds = ['10', '20']
+test_seeds = ['60', '70']
 
 def make_keys(n):
 	keys = {}
@@ -24,17 +24,16 @@ def multisig_create_and_send_to():
 
 	xpubkeys = map(key_funcs.get_public_key, keys)
 
-	print("Public keys:")
-	print("\n".join(xpubkeys))
-	response = account.create_multisig_account('multisig test', 2, xpubkeys)
+	response = account.create_multisig_account('deposit here2', 2, xpubkeys)
+	print(response)
 	created_at = response['account']['created_at']
 	account_id = response['account']['id']
 	print(account_id)
 	address = account.receive_address(account_id)
-	send_respose = account.send(to_address = address, amount = CoinbaseAmount('0.4', "USD"), notes='test send')
+	send_respose = account.send(to_address = address, amount = CoinbaseAmount('1.00', "USD"), notes='test send')
 
 def multisig_send_from(keys, account_id, address):
-	send_response = account.send_from_multisig(from_address = account_id, to_address = address, amount = CoinbaseAmount('0.4', "USD"), notes='test send')
+	send_response = account.send_from_multisig(from_address = account_id, to_address = address, amount = CoinbaseAmount('0.39', "USD"), notes='test send')
 	print(send_response)
 	sighash = send_response['transaction']['inputs']['sighash']
 	required_sigs = []
@@ -57,18 +56,18 @@ def sign_addresses(keys, required_sigs):
 		signatures.append(key_funcs.bitcoin_sign(private_key, sighash))
 	return signatures
 
-#multisig_send_from('5455ffa3d420119475000010', 'kevinlin@berkeley.edu')
 keys = make_keys(2)
-required_sigs = [ { 'address': '17rayYCwAPsoxqokhpDeW5whXENWKrtfdk',
-		    'sighash': '1000',
-		    'level': 4
-		  },
-		  { 'address': '1PYSBUimNnihuWkUibgY1JrZvHwoCbyLcY',
-		    'sighash': '1000',
-	  	    'level': 4
-		  }
-		]
-sigs = sign_addresses(keys, required_sigs)
-print(keys)
-print(sigs)
-#multisig_create_and_send_to()
+#multisig_send_from(keys, '5455ffa3d420119475000010', 'kevinlin@berkeley.edu')
+# required_sigs = [ { 'address': '17rayYCwAPsoxqokhpDeW5whXENWKrtfdk',
+# 		    'sighash': '1000',
+# 		    'level': 4
+# 		  },
+# 		  { 'address': '1PYSBUimNnihuWkUibgY1JrZvHwoCbyLcY',
+# 		    'sighash': '1000',
+# 	  	    'level': 4
+# 		  }
+# 		]
+# sigs = sign_addresses(keys, required_sigs)
+# print(keys)
+# print(sigs)
+multisig_create_and_send_to()

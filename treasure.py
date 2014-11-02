@@ -1,11 +1,12 @@
 from datetime import date, timedelta
+import keyfuncs, multisig
 
 class Donation:
     def __init__(self, donor, charities, initial_amount, dribble):
         self._donor = donor # the donor's bitcoin address
         self._charities = charities
         self.amount = initial_amount # in USD
-        self._keys = multisig.make_keys(len(charities))
+        self._keys = key_funcs.make_keys(len(charities))
         self._dribble = dribble
         self.creation_time = date.today()
 
@@ -61,7 +62,7 @@ class Donation:
 
     def apply_dribble(self):
 	dribble_amount = _dribble.percentage * amount
-	multisig.multisig_send_from(keys = _keys, account_id = donor, address = multisig_address, amount = dribble_amount, note = "Dribbling back..")
+	multisig.multisig_send_from(keys = _keys, account_id = donor, address = multisig_address, amount = dribble_amount, note = "Dribbling back..", account = _account)
         new_amount = amount * (1 - _dribble.percentage)
         amount = new_amount
         donation.last_dribbled = date.today()

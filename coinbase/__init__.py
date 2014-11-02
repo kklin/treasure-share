@@ -412,7 +412,7 @@ class CoinbaseAccount(object):
         self._require_allow_transfers()
         self._require_authentication()
 
-        url = coinbase_url('transactions', 'send_money')
+        url = 'https://api.coinbase.com/v1/transactions/send_money'
 
         request_data = {
             'transaction': {
@@ -623,11 +623,6 @@ class CoinbaseAccount(object):
         return response.json()['address']
 
     def create_multisig_account(self, account_name, m, xpubkeys):
-        """
-        Generate a new receive address
-        :param callback_url: The URL to receive instant payment notifications
-        :return: The new string address
-        """
         self._require_authentication()
 
         url = "https://api.coinbase.com/v1/accounts" # use the new api

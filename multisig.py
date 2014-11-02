@@ -5,18 +5,6 @@ from coinbase import CoinbaseAccount
 from coinbase.models.amount import CoinbaseAmount
 from secrets import OAUTH_TOKEN
 
-test_seeds = ['10', '20']
-
-def make_keys(n):
-	keys = {}
-	for _ in range(n):
-		#seed = os.urandom(256/8)
-		seed = test_seeds[_]
-		key = key_funcs.make_key(seed)
-		key_address = key.address()
-		keys[key_address] = key
-	return keys
-
 def multisig_create_and_transfer(account, keys, amount, note=""):
 	xpubkeys = map(key_funcs.get_public_key, keys)
 
@@ -26,7 +14,7 @@ def multisig_create_and_transfer(account, keys, amount, note=""):
 	send_respose = account.send(to_address = address, amount = CoinbaseAmount(amount, "USD"), note = note)
 	return address
 
-def multisig_send_from(keys, account_id, address, amount, note = ""):
+def multisig_send_from(account, keys, account_id, address, amount, note = ""):
 	send_response = account.send_from_multisig(from_address = account_id, to_address = address, amount = CoinbaseAmount(amount, "USD"), note = note)
 	print(send_response)
 	sighash = send_response['transaction']['inputs']['sighash']
@@ -36,16 +24,5 @@ def multisig_send_from(keys, account_id, address, amount, note = ""):
 					'sighash': sighash,
 					'level': addresses['address']['node_path']
 				      } )
-	sigs = sign_addresses(keys, required_sigs)
+	sigs = key_funcs.sign_addresses(keys, required_sigs)
 	account.put_signatures(sigs)
-
-def sign_addresses(keys, required_sigs):
-	signatures = []
-	for required_sig in required_sigs:
-		address = required_sig['address']
-		sighash = required_sig['sighash']
-		level = required_sig['level']
-		key = keys[address]		
-		private_key = binascii.b2a_hex(key.child(level).prvkey())
-		signatures.append(key_funcs.bitcoin_sign(private_key, sighash))
-	return signatures

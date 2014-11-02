@@ -1,4 +1,5 @@
 from datetime import date, timedelta
+from treasure import Donation
 
 class Dribbler:
     def __init__(self, donations):

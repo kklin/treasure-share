@@ -11,6 +11,18 @@ from hdwallet import HDWallet
 def make_key(seed):
   return HDWallet.from_master_seed(seed)
 
+test_seeds = ['5', '6']
+
+def make_keys(n):
+	keys = {}
+	for _ in range(n):
+		#seed = os.urandom(256/8)
+		seed = test_seeds[_]
+		key = key_funcs.make_key(seed)
+		key_address = key.address()
+		keys[key_address] = key
+	return keys
+
 def get_child(key, n):
   return key.child(n)
 
@@ -19,18 +31,6 @@ def get_private_key(key):
 
 def get_public_key(key):
   return key.to_extended_key()
-
-def main():
-
-  # --- test vector 1
-  seed = '000102030405060708090a0b0c0d0e0f'
-  seq = [0x80000000, 1, 0x80000002, 2, 1000000000]
-  key = make_key(seed)
-  child = key.child(4) # This number comes from Coinbase
-  print("public key: " + get_public_key(key))
-  print("private key: " + get_private_key(key))
-  print("public key: " + get_public_key(child))
-  print("private key: " + get_private_key(child))
 
 def bitcoin_sign(privkey, sighash):
     """Create a signature using the provided private key and signature hash.
@@ -45,6 +45,29 @@ def bitcoin_sign(privkey, sighash):
     sig = key.sign_digest_deterministic(
         binascii.a2b_hex(sighash), sha256, sigencode_der)
     return binascii.b2a_hex(sig)
+
+def sign_addresses(keys, required_sigs):
+	signatures = []
+	for required_sig in required_sigs:
+		address = required_sig['address']
+		sighash = required_sig['sighash']
+		level = required_sig['level']
+		key = keys[address]		
+		private_key = binascii.b2a_hex(key.child(level).prvkey())
+		signatures.append(key_funcs.bitcoin_sign(private_key, sighash))
+	return signatures
+
+def main():
+
+  # --- test vector 1
+  seed = '000102030405060708090a0b0c0d0e0f'
+  seq = [0x80000000, 1, 0x80000002, 2, 1000000000]
+  key = make_key(seed)
+  child = key.child(4) # This number comes from Coinbase
+  print("public key: " + get_public_key(key))
+  print("private key: " + get_private_key(key))
+  print("public key: " + get_public_key(child))
+  print("private key: " + get_private_key(child))
 
 if __name__ == "__main__":
   main()
