@@ -14,7 +14,6 @@ def multisig_create_and_transfer(account, keys, amount, note=""):
 	response = account.create_multisig_account('Donation', 2, xpubkeys)
 	account_id = response['account']['id']
 	address = account.receive_address(account_id)
-	print('first addr ' + address)
 	send_response = account.send(to_address = address, amount = CoinbaseAmount(amount, "USD"), user_fee = '.0002', notes = note)
 	return address
 
