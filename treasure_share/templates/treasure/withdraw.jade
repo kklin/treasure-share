@@ -20,3 +20,7 @@ html(lang='en')
         br
         br
         input(type="submit", value="Submit for Approval from Partners")
+        br
+        br
+    form(name="input", action="/", method="POST") {% csrf_token %}
+        input(type="submit", value="Back to Home")

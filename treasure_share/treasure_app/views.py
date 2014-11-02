@@ -32,7 +32,7 @@ def action(request):
     charities.append(charity_2)
 
 
-    donation = Donation(request.POST['donor_name']), charities, float(request.POST['amount']), dribble_obj, request.session['oauth_json'])
+    donation = Donation(request.POST['donor_name'], charities, float(request.POST['amount']), dribble_obj, request.session['oauth_json'])
     #add donation to donation database
 
     return HttpResponseRedirect('/')
@@ -71,7 +71,7 @@ def auth2(request):
     print(token.to_json())
     #response = HttpResponse(token.to_json(), content_type = 'text/plain')
     request.session['oauth_json'] = token.to_json()
-    return redirect('/')
+    return redirect('/donate/')
 
 def display_oauth(request):
     response = HttpResponse(request.session['oauth_json'], content_type = 'text/plain')
