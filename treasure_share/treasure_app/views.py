@@ -25,14 +25,27 @@ def action(request):
     charity_2 = profile.Profile(request.POST['name_2'])
     charity_2.add_email(request.POST['email_2'])
 
-    dribble_obj = dribble.Dribble(request.POST['frequency'], request.POST['percentage'], request.POST['delay'])
+    dribble_obj = dribble.Dribble(float(request.POST['frequency']), float(request.POST['percentage']), float(request.POST['delay']))
 
     charities = []
     charities.append(charity_1)
     charities.append(charity_2)
 
-    donation = Donation(request.POST['donor_name'], charities, request.POST['amount'], dribble_obj)
+    donation = Donation(request.POST['donor_name'], charities, float(request.POST['amount']), dribble_obj)
     #add donation to donation database
+
+    return HttpResponseRedirect('/')
+
+def withdraw(request):
+    context = RequestContext(request)
+    return render_to_response('treasure/withdraw.jade', {}, context)
+
+def action_withdraw(request):
+    print(request.POST)
+    sf_wallet_id = request.POST['sf_wallet_id']
+    sf_key = request.POST['sf_key']
+    dest_id = request.POST['dest_id']
+    amount = float(request.POST['amount'])
 
     return HttpResponseRedirect('/')
 
