@@ -18,6 +18,9 @@ class Donation:
 
     def create_wallet(self):
         #POST /api/v1/accounts
+        def add_funds():
+            pass
+        add_funds()
         pass
 
     def gen_keys(self, users):

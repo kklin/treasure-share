@@ -1,5 +1,8 @@
 from django.contrib import admin
-from treasure.models import Treasure, Dribble
+from treasure.models import Donation, Dribble, Profile, Recipients, Membership
 
-admin.site.register(Treasure)
+admin.site.register(Donation)
 admin.site.register(Dribble)
+admin.site.register(Profile)
+admin.site.register(Recipients)
+admin.site.register(Membership)

@@ -1,0 +1,39 @@
+doctype html
+html(lang='en')
+  body
+    h1 Fund a Collaborative Project!
+
+    form(name="input", action="action/", method="POST") {% csrf_token %}
+        | Your Name:
+        input(type="text", name="donor_name")
+        br
+        br
+        | Charity 1 Name:
+        input(type="text", name="name_1")
+        br
+        | Charity 1 Email:
+        input(type="text", name="email_1")
+        br
+        br
+        | Charity 2 Name:
+        input(type="text", name="name_2")
+        br
+        | Charity 2 Email:
+        input(type="text", name="email_2")
+        br
+        br
+        | Amount:
+        input(type="text", name="amount")
+        br
+        br
+        | How many days till refund dribble begins?
+        input(type="text", name="delay")
+        br
+        | At what percentage?
+        input(type="text", name="percentage")
+        br
+        | How often? (in days)
+        input(type="text", name="frequency")
+        br
+        br
+        input(type="submit", value="Donate Now")
