@@ -11,16 +11,16 @@ from hdwallet import HDWallet
 def make_key(seed):
   return HDWallet.from_master_seed(seed)
 
-test_seeds = ['5', '6']
-
 def make_keys(n):
-	keys = {}
+	#keys = {}
+	keys = []
 	for _ in range(n):
-		#seed = os.urandom(256/8)
-		seed = test_seeds[_]
+		seed = os.urandom(256/8)
+		#seed = test_seeds[_]
 		key = key_funcs.make_key(seed)
-		key_address = key.address()
-		keys[key_address] = key
+		#key_address = key.address()
+		#keys[key_address] = key
+		keys.append(key)
 	return keys
 
 def get_child(key, n):
