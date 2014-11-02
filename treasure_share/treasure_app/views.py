@@ -1,8 +1,7 @@
 from django.shortcuts import render, render_to_response, redirect
 from django.template import RequestContext
 from treasure_app.models import Dribble, Recipients, Profile
-from treasure import Donation
-import treasure, profile, dribble, multisig
+import treasure, profile, dribble, multisig, key_funcs
 from oauth2client.client import OAuth2WebServerFlow
 import httplib2
 from secrets import CALLBACK_URL, CLIENT_ID, CLIENT_SECRET
@@ -20,6 +19,7 @@ def donate(request):
 
 def action(request):
     print(request.POST)
+    
     charity_1 = profile.Profile(request.POST['name_1'])
     charity_1.add_email(request.POST['email_1'])
 
@@ -35,30 +35,52 @@ def action(request):
     donation = Donation(request.POST['donor_name'], charities, float(request.POST['amount']), dribble_obj, request.session['oauth_json'])
     #add donation to donation database
 
-    return HttpResponseRedirect('/')
+    context = RequestContext(request)
+    return render_to_response('treasure/ty_donate.jade', {}, context)
 
 def withdraw(request):
     context = RequestContext(request)
     return render_to_response('treasure/withdraw.jade', {}, context)
 
 def action_withdraw(request):
-    sf_wallet_id = request.POST['sf_wallet_id']
-    sf_key = request.POST['sf_key']
-    sf_key2 = request.POST['sf_key2']
-    dest_id = request.POST['dest_id']
+    sf_wallet_id = request.POST['sf_wallet_id'].encode('utf8')
+    sf_key = request.POST['sf_key'].encode('utf8')
+    sf_key2 = request.POST['sf_key2'].encode('utf8')
+    dest_id = request.POST['dest_id'].encode('utf8')
     amount = float(request.POST['amount'])
 
-    keys = [ key_from_private_key(sf_key), key_from_private_key(sf_key2) ]
+    keys = [ key_funcs.key_from_private_key(sf_key), key_funcs.key_from_private_key(sf_key2) ]
 
     account = multisig.get_account(request.session['oauth_json'])
-    multisig.send_from(account = account, keys = keys, account_id = sf_wallet_id, to_address = dest_id, amount = amount)
+    multisig.multisig_send_from(account = account, keys = keys, account_id = sf_wallet_id, address = dest_id, amount = amount)
+    context = RequestContext(request)
+    return render_to_response('treasure/ty_withdraw.jade', {}, context)
+
+def transaction(request):
+    return render_to_response('treasure/sign_transaction.jade', {}, RequestContext(request))
+
+def sign_transaction(request):
+    account_id = request.POST['account_id'].encode('utf8')
+    sf_key = request.POST['sf_key'].encode('utf8')
+    sf_key2 = request.POST['sf_key2'].encode('utf8')
+    transaction_id = request.POST['transaction_id'].encode('utf8')
+
+    keys = [ key_funcs.key_from_private_key(sf_key), key_funcs.key_from_private_key(sf_key2) ]
+
+    account = multisig.get_account(request.session['oauth_json'])
+    resp = multisig.multisig_sign_from_transaction(account = account, keys = keys, transaction_id = transaction_id, account_id = account_id)
+    print(resp)
     return HttpResponseRedirect('/')
 
 coinbase_client = OAuth2WebServerFlow(CLIENT_ID, CLIENT_SECRET, 'all', redirect_uri='https://198.199.112.146/auth2', auth_uri='https://www.coinbase.com/oauth/authorize', token_uri='https://www.coinbase.com/oauth/token')
 
-def index(request):
-  context = RequestContext(request)
-  return render_to_response('treasure/index.jade', {}, context)
+def ty_donate(request):
+    context = RequestContext(request)
+    return render_to_response('treasure/ty_donate.jade', {}, context)
+
+def ty_withdraw(request):
+    context = RequestContext(request)
+    return render_to_response('treasure/ty_withdraw.jade', {}, context)
 
 def auth(request):
   auth_url = coinbase_client.step1_get_authorize_url()

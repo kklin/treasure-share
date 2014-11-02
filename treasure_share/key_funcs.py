@@ -28,7 +28,7 @@ def get_child(key, n):
   return key.child(n)
 
 def get_private_key(key):
-  return key.to_extended_key(include_prv=key.prvkey())
+  return key.to_extended_key(include_prv=True)
 
 def get_public_key(key):
   return key.to_extended_key()
@@ -64,14 +64,17 @@ def key_from_private_key(privkey):
 def main():
 
   # --- test vector 1
-  seed = '000102030405060708090a0b0c0d0e0f'
-  seq = [0x80000000, 1, 0x80000002, 2, 1000000000]
-  key = make_key(seed)
-  child = key.child(4) # This number comes from Coinbase
-  print("public key: " + get_public_key(key))
-  print("private key: " + get_private_key(key))
-  print("public key: " + get_public_key(child))
-  print("private key: " + get_private_key(child))
+  # seed = '000102030405060708090a0b0c0d0e0f'
+  # seq = [0x80000000, 1, 0x80000002, 2, 1000000000]
+  # key = make_key(seed)
+  # child = key.child(4) # This number comes from Coinbase
+  # print("public key: " + get_public_key(key))
+  # print("private key: " + get_private_key(key))
+  # print("public key: " + get_public_key(child))
+  # print("private key: " + get_private_key(child))
+
+  key = make_keys(1)[0]
+  print(key.prvkey() == key_from_private_key(get_private_key(key)).prvkey())
 
 if __name__ == "__main__":
   main()
