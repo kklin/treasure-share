@@ -15,5 +15,7 @@ urlpatterns = patterns('',
     url(r'^auth2/', views.auth2),
     url(r'^display_oauth/', views.display_oauth),
     url(r'^withdraw/$', views.withdraw, name='donate'),
+    url(r'^transaction/sign_withdraw/$', views.sign_transaction),
+    url(r'^transaction/$', views.transaction),
     url(r'^withdraw/action_withdraw/', views.action_withdraw, name='action_w'),
 )

@@ -3,9 +3,9 @@ html(lang='en')
   body
     h1 Access Funds for Your Collaborative Project!
 
-    form(name="input", action="action_withdraw/", method="POST") {% csrf_token %}
-        | Shared Funds Wallet ID:
-        input(type="text", name="sf_wallet_id")
+    form(name="input", action="sign_withdraw/", method="POST") {% csrf_token %}
+        | Transaction ID:
+        input(type="text", name="transaction_id")
         br
         | Shared Funds Wallet Key 1:
         input(type="text", name="sf_key")
@@ -14,12 +14,8 @@ html(lang='en')
         input(type="text", name="sf_key2")
         br
         br
-        | Destination ID:
-        input(type="text", name="dest_id")
-        br
-        br
-        | Amount(USD):
-        input(type="text", name="amount")
+        | Account ID:
+        input(type="text", name="account_id")
         br
         br
         input(type="submit", value="Submit for Approval from Partners")
