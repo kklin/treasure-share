@@ -1,16 +1,33 @@
+{% load staticfiles %}
 doctype html
 html(lang='en')
+  head
+    title Treasure Share
+    link(rel='stylesheet', href='{% static "css/global.css" %}', type='text/css')
+    meta(name='viewport' content='width=device-width, initial-scale=1, maximum-scale=1')
+    meta(charset='utf-8')
+    meta(http-equiv='X-UA-Compatible', content='IE=edge, chrome=1')
   body
-    h1 Welcome to Treasure Share
-    h3 Using Bit Technology to Inspire Collaboration.
-    | Donors:
-    br
-    form(name="input", action="auth/", method="POST") {% csrf_token %}
-        input(type="submit", value="Oauth Login")
-    br
-    br
-    | Collaborators:
-    br
-    form(name="input", action="withdraw/", method="POST") {% csrf_token %}
-        input(type="submit", value="Access Your Shared Funds")
-
+    div#container
+      div#holder
+        div#main
+          div#title
+            h1 Welcome to Treasure Share
+            h3 Using Bit Technology to Inspire Collaboration
+          div#division
+            div#donors
+              div#titlebar
+                span Donors
+              div#logo
+                img(src='{% static "images/donors.png" %}' alt='donors logo')
+              div#action
+                form(name="input", action="auth/", method="POST") {% csrf_token %}
+                    input.btn(type="submit", value="Oauth Login")
+            div#charities
+              div#titlebar
+                span Charities
+              div#logo
+                img(src='{% static "images/donors.png" %}' alt='donors logo')
+              div#action
+                form(name="input", action="withdraw/", method="POST") {% csrf_token %}
+                    input.btn(type="submit", value="Access Your Funds")
