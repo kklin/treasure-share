@@ -72,8 +72,8 @@ def get_sighashes(transaction_id, account_id):
 keys = make_keys(2)
 #transaction = account.transactions(count=30)[0]
 #print(get_sighashes('545644aed602e6abcd00001e', '5456289bd42011781000000a'))
-multisig_send_from(keys, '545648c0fbb87d1c7a000030', 'gordonmslai@gmail.com')
-#multisig_sign_from_transaction("54566227abbd31121000000c", "545648c0fbb87d1c7a000030")
+#multisig_send_from(keys, '545648c0fbb87d1c7a000030', 'gordonmslai@gmail.com')
+multisig_sign_from_transaction("545684ddfc477ac6f6000006", "38sHDJr5bJ4TTcqE9YmwhNHHmiAMqxZ1vE")
 #print(get_sighashes('54563b870b6947bddb000012'))
 # required_sigs = [ { 'address': '17rayYCwAPsoxqokhpDeW5whXENWKrtfdk',
 # 		    'sighash': '1000',

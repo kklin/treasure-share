@@ -1,5 +1,5 @@
 from datetime import date, timedelta
-import key_funcs, multisig
+import key_funcs, multisig, string
 
 class Donation:
     def __init__(self, donor, charities, initial_amount, dribble, oauth_token):
@@ -51,12 +51,14 @@ class Donation:
         template_values['charity_name'] = charity.name
         template_values['donor_name'] = self._donor
         template_values['amount'] = self.amount
-        template_values['other_charities'] = " ".join(self._charities.remove(charity))
-        template_values['delay'] = self._dribble.delay
-        template_values['dribble'] = self._dribble.percentage*100 + "% / " + self._dribble.frequency
-        template_values['key'] = key
+	other_charities = [iter_charity.name for iter_charity in self._charities]
+	other_charities.remove(charity.name)
+        template_values['other_charities'] = " ".join(other_charities)
+        template_values['delay'] = self._dribble.delay + " days" 
+        template_values['dribble'] = str(self._dribble.percentage) + "%% / " + str(self._dribble.frequency)
+        template_values['key'] = key_funcs.get_private_key(key)
         template_values['wallet'] = self.multisig_address
-        return string.Template(template).substitute(template_values) % template_values
+        return string.Template(template).substitute(template_values)
 
     def get_dribble(self):
         return self._dribble
