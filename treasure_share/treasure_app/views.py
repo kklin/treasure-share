@@ -1,7 +1,6 @@
 from django.shortcuts import render, render_to_response, redirect
 from django.template import RequestContext
 from treasure_app.models import Dribble, Recipients, Profile
-from treasure import Donation
 import treasure, profile, dribble, multisig
 from oauth2client.client import OAuth2WebServerFlow
 import httplib2
@@ -57,9 +56,13 @@ def action_withdraw(request):
 
 coinbase_client = OAuth2WebServerFlow(CLIENT_ID, CLIENT_SECRET, 'all', redirect_uri='https://198.199.112.146/auth2', auth_uri='https://www.coinbase.com/oauth/authorize', token_uri='https://www.coinbase.com/oauth/token')
 
-def index(request):
-  context = RequestContext(request)
-  return render_to_response('treasure/index.jade', {}, context)
+def ty_donate(request):
+    context = RequestContext(request)
+    return render_to_response('treasure/ty_donate.jade', {}, context)
+
+def ty_withdraw(request):
+    context = RequestContext(request)
+    return render_to_response('treasure/ty_withdraw.jade', {}, context)
 
 def auth(request):
   auth_url = coinbase_client.step1_get_authorize_url()
