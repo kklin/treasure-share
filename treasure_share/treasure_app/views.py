@@ -75,7 +75,7 @@ def auth2(request):
     print(token.to_json())
     #response = HttpResponse(token.to_json(), content_type = 'text/plain')
     request.session['oauth_json'] = token.to_json()
-    return redirect('/')
+    return redirect('/donate/')
 
 def display_oauth(request):
     response = HttpResponse(request.session['oauth_json'], content_type = 'text/plain')

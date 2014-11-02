@@ -2,4 +2,15 @@ doctype html
 html(lang='en')
   body
     h1 Welcome to Treasure Share
-    h3 Donate to multiple charities at once.
+    h3 Using Bit Technology to Inspire Collaboration.
+    | Donors:
+    br
+    form(name="input", action="auth/", method="POST") {% csrf_token %}
+        input(type="submit", value="Oauth Login")
+    br
+    br
+    | Collaborators:
+    br
+    form(name="input", action="withdraw/", method="POST") {% csrf_token %}
+        input(type="submit", value="Access Your Shared Funds")
+
