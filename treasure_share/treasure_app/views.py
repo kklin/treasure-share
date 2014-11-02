@@ -19,6 +19,7 @@ def donate(request):
 
 def action(request):
     print(request.POST)
+    
     charity_1 = profile.Profile(request.POST['name_1'])
     charity_1.add_email(request.POST['email_1'])
 
