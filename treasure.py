@@ -1,4 +1,3 @@
-from Crypto.PublicKey import RSA
 
 _keys = {}
 _creation_time = 0
