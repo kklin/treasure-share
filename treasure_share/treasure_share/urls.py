@@ -9,6 +9,8 @@ urlpatterns = patterns('',
 
     url(r'^admin/', include(admin.site.urls)),
     url(r'^$', views.index, name='index'),
+    url(r'^donate/$', views.donate, name='donate'),
+    url(r'^donate/action/', views.action, name='action'),
     url(r'^auth/', views.auth),
     url(r'^auth2/', views.auth2),
     url(r'^display_oauth/', views.display_oauth),

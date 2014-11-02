@@ -1,0 +1,29 @@
+<%@ Language= "Python" %>
+<html>
+<head>
+<title> Form Submitted </title>
+</head>
+
+<body>
+    <br> Submitting data...you will be redirected shortly. <br/>
+<%
+from treasure-share import treasure, profile, dribble
+
+charity_1 = profile.Profile(Request.Form("name_1"))
+charity_1.add_email(Request.Form("email_1"))
+
+charity_2 = profile.Profile(Request.Form("name_2"))
+charity_2.add_email(Request.Form("email_2"))
+
+dribble = dribble.Dribble(Request.Form("frequency"),Request.Form("percentage"),Request.Form("delay"))
+
+charities = []
+charities.append(charity_1)
+charities.append(charity_2)
+
+donation = Donation(Request.Form("donor_name"), charities, Request.Form("amount"), dribble)
+#add donation to donation database
+
+%> 
+</body>
+</html>
