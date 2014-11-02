@@ -2,11 +2,11 @@ from django.shortcuts import render, render_to_response, redirect
 from django.template import RequestContext
 from treasure_app.models import Donation, Dribble, Recipients, Profile
 import treasure, profile, dribble
-from django.http import HttpResponse
-
 from oauth2client.client import OAuth2WebServerFlow
 import httplib2
 from secrets import CALLBACK_URL, CLIENT_ID, CLIENT_SECRET
+from django.http import HttpResponseRedirect, HttpResponse
+
 
 
 def index(request):
@@ -18,22 +18,23 @@ def donate(request):
     return render_to_response('treasure/donate.jade', {}, context)
 
 def action(request):
+    print(request.POST)
     charity_1 = profile.Profile(request.POST['name_1'])
     charity_1.add_email(request.POST['email_1'])
 
     charity_2 = profile.Profile(request.POST['name_2'])
     charity_2.add_email(request.POST['email_2'])
 
-    dribble = dribble.Dribble(request.POST['frequency'], request.POST['percentage'], request.POST['delay'])
+    dribble_obj = dribble.Dribble(request.POST['frequency'], request.POST['percentage'], request.POST['delay'])
 
     charities = []
     charities.append(charity_1)
     charities.append(charity_2)
 
-    donation = Donation(request.POST['donor_name'], charities, request.POST['amount'], dribble)
+    donation = Donation(request.POST['donor_name'], charities, request.POST['amount'], dribble_obj)
     #add donation to donation database
 
-    return HttpResponseRedirect('$')
+    return HttpResponseRedirect('/')
 
 coinbase_client = OAuth2WebServerFlow(CLIENT_ID, CLIENT_SECRET, 'all', redirect_uri='https://198.199.112.146/auth2', auth_uri='https://www.coinbase.com/oauth/authorize', token_uri='https://www.coinbase.com/oauth/token')
 
