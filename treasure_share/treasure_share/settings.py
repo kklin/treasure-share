@@ -43,7 +43,6 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'treasure_app',
-    'south',
 )
 
 MIDDLEWARE_CLASSES = (
