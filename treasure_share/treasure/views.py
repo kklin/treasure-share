@@ -25,6 +25,11 @@ def auth2(request):
     http = httplib2.Http(ca_certs='/etc/ssl/certs/ca-certificates.crt')
 
     token = coinbase_client.step2_exchange(oauth_code, http=http)
-    print(token)
-    response = HttpResponse(token.to_json(), content_type = 'text/plain')
+    print(token.to_json())
+    #response = HttpResponse(token.to_json(), content_type = 'text/plain')
+    request.session['oauth_json'] = token.to_json()
+    return redirect('/display_oauth')
+
+def display_oauth(request):
+    response = HttpResponse(request.session['oauth_json'], content_type = 'text/plain')
     return response

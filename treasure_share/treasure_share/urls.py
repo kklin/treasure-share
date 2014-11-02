@@ -11,4 +11,5 @@ urlpatterns = patterns('',
     url(r'^$', views.index, name='index'),
     url(r'^auth/', views.auth),
     url(r'^auth2/', views.auth2),
+    url(r'^display_oauth/', views.display_oauth),
 )

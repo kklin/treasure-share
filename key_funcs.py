@@ -57,6 +57,9 @@ def sign_addresses(keys, required_sigs):
 		signatures.append(key_funcs.bitcoin_sign(private_key, sighash))
 	return signatures
 
+def key_from_private_key(privkey):
+	return HDWallet.from_extended_key(privkey)
+
 def main():
 
   # --- test vector 1
