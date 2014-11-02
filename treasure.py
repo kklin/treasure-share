@@ -33,14 +33,14 @@ class Donation:
         for charity in _charities:
             notify_charity(charity, _keys[charity])
 
-    def notify_charity(self, charity_name, key):
+    def notify_charity(self, charity, key):
         # email(notify_charity_template(charity_name, key))
-        print(notify_charity_template(charity_name, key))
+        print(notify_charity_template(charity, key))
 
-    def notify_charity_template(charity_name, key):
+    def notify_charity_template(charity, key):
         template = '''
-                    Hey $charity!
-                    $donor has decided to donate $amount BTC to you, but this money
+                    Hey $charity_name!
+                    $donor_name has decided to donate $amount BTC to you, but this money
                     is conditional upon you working with $other_charities.
                     You cannot access this money until you come to some agreement
                     with the them about how you're going to use this money.
@@ -56,9 +56,9 @@ class Donation:
                     Much love,
                     Treasure Share
                    '''
-        template_values[charity] = charity_name
-        template_values[donor] = _donor
-        template_values[amount] = _amount
+        template_values[charity_name] = charity.name
+        template_values[donor_name] = _donor.name
+        template_values[amount] = amount
         template_values[other_charities] = " ".join(_charities.remove(charity_name))
         template_values[delay] = _dribble.delay
         template_values[dribble] = _dribble.percentage*100 + "% / " + _dribble.frequency
