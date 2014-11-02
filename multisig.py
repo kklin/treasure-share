@@ -17,17 +17,17 @@ def make_keys(n):
 		keys[key_address] = key
 	return keys
 
-def multisig_create_and_transfer(account, keys, amount):
+def multisig_create_and_transfer(account, keys, amount, note=""):
 	xpubkeys = map(key_funcs.get_public_key, keys)
 
 	response = account.create_multisig_account('multisig test', 2, xpubkeys)
 	account_id = response['account']['id']
 	address = account.receive_address(account_id)
-	send_respose = account.send(to_address = address, amount = CoinbaseAmount(amount, "USD"))
+	send_respose = account.send(to_address = address, amount = CoinbaseAmount(amount, "USD"), note = note)
 	return address
 
-def multisig_send_from(keys, account_id, address, amount):
-	send_response = account.send_from_multisig(from_address = account_id, to_address = address, amount = CoinbaseAmount(amount, "USD"))
+def multisig_send_from(keys, account_id, address, amount, note = ""):
+	send_response = account.send_from_multisig(from_address = account_id, to_address = address, amount = CoinbaseAmount(amount, "USD"), note = note)
 	print(send_response)
 	sighash = send_response['transaction']['inputs']['sighash']
 	required_sigs = []

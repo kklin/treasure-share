@@ -16,7 +16,7 @@ class Donation:
 
     # creates a multisig wallet and returns the address of the wallet
     def create_wallet(self):
-	return multisig.create_and_transfer(account = _account, keys = _keys, amount = amount)
+	return multisig.create_and_transfer(account = _account, keys = _keys, amount = amount, note = "Donation :)")
 
     # distributes the keys
     def notify_charities(self):
@@ -61,7 +61,7 @@ class Donation:
 
     def apply_dribble(self):
 	dribble_amount = _dribble.percentage * amount
-	multisig.multisig_send_from(keys = _keys, account_id = donor, address = multisig_address, amount = dribble_amount)
+	multisig.multisig_send_from(keys = _keys, account_id = donor, address = multisig_address, amount = dribble_amount, note = "Dribbling back..")
         new_amount = amount * (1 - _dribble.percentage)
         amount = new_amount
         donation.last_dribbled = date.today()
