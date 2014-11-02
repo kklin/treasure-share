@@ -1,3 +1,5 @@
 from django.contrib import admin
+from treasure.models import Treasure, Dribble
 
-# Register your models here.
+admin.site.register(Treasure)
+admin.site.register(Dribble)
