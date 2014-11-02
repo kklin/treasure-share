@@ -2,36 +2,26 @@ from datetime import date, timedelta
 
 class Donation:
     def __init__(self, donor, charities, initial_amount, dribble):
-        self._donor = donor
+        self._donor = donor # the donor's bitcoin address
         self._charities = charities
-        self.amount = initial_amount
-        self._keys = gen_keys([donor] + charities)
+        self.amount = initial_amount # in USD
+        self._keys = multisig.make_keys(len(charities))
         self._dribble = dribble
         self.creation_time = date.today()
 
 
-        create_wallet()
-        add_keypairs(_keys)
+        self.multisig_address = create_wallet()
         notify_charities()
-        apply_dribble()
         print("Donation made")
 
+    # creates a multisig wallet and returns the address of the wallet
     def create_wallet(self):
-        #POST /api/v1/accounts
-        pass
+	return multisig.create_and_transfer(account = _account, keys = _keys, amount = amount)
 
-    def gen_keys(self, users):
-        for user in users:
-            key_pair = RSA.generate(2048)
-            self._keys[user] = key_pair
-
-    def add_keypairs(self):
-        #PUT /api/v1/accounts/:account_id/keypairs
-        pass
     # distributes the keys
     def notify_charities(self):
-        for charity in _charities:
-            notify_charity(charity, _keys[charity])
+        for i, charity in enumerate(_charities):
+            notify_charity(charity, _keys[i])
 
     def notify_charity(self, charity_name, key):
         # email(notify_charity_template(charity_name, key))
@@ -70,4 +60,8 @@ class Donation:
         return self._dribble
 
     def apply_dribble(self):
-        pass
+	dribble_amount = _dribble.percentage * amount
+	multisig.multisig_send_from(keys = _keys, account_id = donor, address = multisig_address, amount = dribble_amount)
+        new_amount = amount * (1 - _dribble.percentage)
+        amount = new_amount
+        donation.last_dribbled = date.today()
