@@ -234,8 +234,7 @@ class CoinbaseAccount(object):
         response = self.session.get(url)
         return CoinbaseAmount.from_coinbase_dict(response.json())
 
-    @property
-    def receive_address(self):
+    def receive_address(self, account_id=None):
         """
         Get the account's current receive address
 
@@ -244,7 +243,15 @@ class CoinbaseAccount(object):
         self._require_authentication()
 
         url = coinbase_url('account', 'receive_address')
-        response = self.session.get(url)
+
+        request_data = {}
+
+	if account_id != None:
+		request_data = {
+		    'account_id': account_id
+		}	
+
+        response = self.session.get(url, data=json.dumps(request_data))
         return response.json()['address']
 
     def contacts(self, page=None, limit=None, query=None):
@@ -383,6 +390,75 @@ class CoinbaseAccount(object):
 
         return CoinbaseTransaction \
             .from_coinbase_dict(response_parsed['transaction'])
+
+    def send_from_multisig(self, to_address, amount, notes='', from_address=None, user_fee=None, idem=None):
+        """
+        Send BitCoin from this account to either an email address or a BTC
+        address
+        :param to_address: Email or BTC address to where coin should be sent
+        :param amount: Amount of currency to send (CoinbaseAmount)
+        :param notes: Notes to be included with transaction
+        :param user_fee: an optionally included miner's fee. Coinbase pays
+        feeds on all transfers over 0.01 BTC, but under that you should include
+        a fee.
+        :param idem: An optional token to ensure idempotence. If a previous
+        transaction with the same idem parameter already exists for this
+        sender, that previous transaction will be returned and a new one will
+        not be created. Max length 100 characters.
+        :return: CoinbaseTransaction with status and details
+        :raise: CoinbaseError with the error list received from Coinbase on
+                 failure
+        """
+        self._require_allow_transfers()
+        self._require_authentication()
+
+        url = 'https://api.coinbase.com/v1/transactions/send_money'
+
+        request_data = {
+            'transaction': {
+                'to': to_address,
+                'notes': notes,
+            },
+        }
+
+	if from_address:
+		request_data['account_id'] = from_address
+
+        if amount.currency == 'BTC':
+            request_data['transaction']['amount'] =  str(amount.amount)
+        else:
+            request_data['transaction']['amount_string'] = str(amount.amount)
+            request_data['transaction']['amount_currency_iso'] = amount.currency
+
+        if user_fee is not None:
+            request_data['transaction']['user_fee'] = str(user_fee)
+
+        if idem is not None:
+            request_data['transaction']['idem'] = str(idem)
+
+        response = self.session.post(url=url, data=json.dumps(request_data))
+        response_parsed = response.json()
+
+	print(response_parsed)
+        if not response_parsed.get('success'):
+            raise CoinbaseError('Failed to send btc.',
+                                response_parsed.get('errors'))
+
+        return response_parsed
+
+    def send_signatures(self, signatures, transaction_id):
+	url = 'https://api.coinbase.com/v1/transactions/' + transaction_id + '/sighashes'
+	request_data = {
+	    'signatures': [
+		{ 'position': 1,
+		  'signatures': signatures
+		}
+	     ]
+	}
+
+	response = self.session.put(url=url, data=json.dumps(request_data))
+	response_parsed = response.json()
+	return response_parsed
 
     def send(self, to_address, amount, notes='', user_fee=None, idem=None):
         """
@@ -547,27 +623,33 @@ class CoinbaseAccount(object):
         return response.json()['address']
 
     def create_multisig_account(self, account_name, m, xpubkeys):
-        """
-        Generate a new receive address
-        :param callback_url: The URL to receive instant payment notifications
-        :return: The new string address
-        """
         self._require_authentication()
 
-        url = coinbase_url('account', 'multisig')
+        url = "https://api.coinbase.com/v1/accounts" # use the new api
+
         request_data = {
             'account': {
                 'name': account_name,
                 'type': 'multisig',
                 'm': m,
-                'xpubkey': []
+                'xpubkeys': []
             }
         }
         for xpubkey in xpubkeys:
-            request_data['account']['xpubkeys'] += xpubkey
+            request_data['account']['xpubkeys'].append(xpubkey)
 
         response = self.session.post(url=url, data=json.dumps(request_data))
-        return response.json()['address']
+        return response.json()
+
+    def get_address(self, account_id):
+        self._require_authentication()
+
+        url = "https://api.coinbase.com/v1/addresses"
+
+	request_data = { 'account_id': account_id }
+
+        response = self.session.get(url=url, data=json.dumps(request_data))
+        return response.json()['addresses']
 
     def create_button(self, button, account_id=None):
         """

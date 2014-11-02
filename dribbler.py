@@ -1,4 +1,5 @@
 from datetime import date, timedelta
+from treasure import Donation
 
 class Dribbler:
     def __init__(self, donations):
@@ -27,6 +28,4 @@ class Dribbler:
         return False
 
     def dribble(self, donation):
-        new_amount = donation.amount * (1 - donation.get_dribble().percentage)
-        donation.amount = new_amount
-        donation.last_dribbled == _currday
+	donation.apply_dribble()
