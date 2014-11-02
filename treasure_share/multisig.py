@@ -3,7 +3,9 @@ import os
 import binascii
 from coinbase import CoinbaseAccount
 from coinbase.models.amount import CoinbaseAmount
-from secrets import OAUTH_TOKEN
+
+def get_account(oauth_token):
+	return CoinbaseAccount(oauth2_credentials=oauth_token)
 
 def multisig_create_and_transfer(account, keys, amount, note=""):
 	xpubkeys = map(key_funcs.get_public_key, keys)

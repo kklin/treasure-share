@@ -2,15 +2,15 @@ from datetime import date, timedelta
 import key_funcs, multisig
 
 class Donation:
-    def __init__(self, donor, charities, initial_amount, dribble):
-        self._donor = donor # the donor's bitcoin address
+    def __init__(self, donor, charities, initial_amount, dribble, oauth_token):
         self._charities = charities
         self.amount = initial_amount # in USD
         self._keys = key_funcs.make_keys(len(charities))
         self._dribble = dribble
         self.creation_time = date.today()
 
-
+	self._account = multisig.get_account(oauth_token)
+	self._donor = self_account.receive_address()
         self.multisig_address = create_wallet()
         notify_charities()
         print("Donation made")
@@ -22,7 +22,7 @@ class Donation:
     # distributes the keys
     def notify_charities(self):
         for i, charity in enumerate(_charities):
-            notify_charity(charity, _keys[i])
+            notify_charity(charity, _keys.values[i])
 
     def notify_charity(self, charity, key):
         # email(notify_charity_template(charity_name, key))
@@ -62,7 +62,7 @@ class Donation:
 
     def apply_dribble(self):
 	dribble_amount = _dribble.percentage * amount
-	multisig.multisig_send_from(keys = _keys, account_id = donor, address = multisig_address, amount = dribble_amount, note = "Dribbling back..", account = _account)
+	multisig.multisig_send_from(keys = _keys, account_id = multisig_address, address = donor, amount = dribble_amount, note = "Dribbling back..", account = _account)
         new_amount = amount * (1 - _dribble.percentage)
         amount = new_amount
         donation.last_dribbled = date.today()
