@@ -1,0 +1,113 @@
+body {
+  margin: 0;
+  font-family: helvetica;
+}
+
+h1, h3 {
+  font-weight: 100;
+  margin-bottom: 3px;
+}
+
+h3 {
+  margin-top: 10px;
+}
+
+#container {
+  display: table;
+  position: absolute;
+  height: 100%;
+  width: 100%;
+}
+
+#container #holder {
+  display: table-cell;
+  vertical-align: middle;
+  position: relative;
+  bottom: 30px;
+} 
+
+#container #holder #main {
+  margin: auto;
+  width: 600px;
+  text-align: center;
+}
+
+#main #title {
+  display: table;
+  width: 100%;
+  margin-bottom:30px;
+  text-align:center;
+}
+
+#main #division {
+  width: 100%;
+  float: left;
+  text-align: center;
+  background-color: #a0a0a0;
+  font-weight: 100;
+}
+
+#main #division #donors {
+  float: left;
+  width: calc(50% - 0.5px);
+  background-color: white;
+}
+
+#main #division #donors #logo, #main #division #charities #logo{
+  margin-top: 12px;
+  margin-bottom: 12px;
+}
+
+#main #division #donors #logo img, #main #division #charities #logo img {
+  width: 150px;
+  height: 150px;
+  margin: 0 auto;
+}
+
+#main #division #charities {
+  float: right;
+  width: calc(50% - 0.5px);
+  background-color: white;
+}
+
+.btn {
+  display: inline-block;
+  color: #666;
+  background-color: #eee;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  font-size: 12px;
+  padding: 10px 30px;
+  border-radius: 5px;
+  -moz-border-radius: 5px;
+  -webkit-border-radius: 5px;
+  border: 1px solid rgba(0,0,0,0.3);
+  border-bottom-width: 3px;
+}
+
+.btn:hover {
+  background-color: #e3e3e3;
+  border-color: rgba(0,0,0,0.5);
+}
+
+.btn:active {
+  background-color: #CCC;
+  border-color: rgba(0,0,0,0.9);
+}
+
+.btn.btn-red {
+  background-color: #E48681;
+  border-color: rgba(0,0,0,0.3);
+  text-shadow: 0 1px 0 rgba(0,0,0,0.5);
+  color: #FFF;
+}
+
+.btn.btn-red:hover {
+  background-color: #DA4F49;
+  border-color: rgba(0,0,0,0.5);
+}
+
+.btn.btn-red:active {
+  background-color: #B32C24;
+  border-color: rgba(0,0,0,0.9);
+}

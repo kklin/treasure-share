@@ -1,0 +1,8 @@
+doctype html
+html(lang='en')
+  body
+    h1 Funds withdrawn!
+    br
+    br
+    form(name="input", action="/", method="POST") {% csrf_token %}
+        input(type="submit", value="Back to Home")
