@@ -54,7 +54,7 @@ class Donation:
 	other_charities = [iter_charity.name for iter_charity in self._charities]
 	other_charities.remove(charity.name)
         template_values['other_charities'] = " ".join(other_charities)
-        template_values['delay'] = self._dribble.delay + " days" 
+        template_values['delay'] = str(self._dribble.delay) + " days" 
         template_values['dribble'] = str(self._dribble.percentage) + "%% / " + str(self._dribble.frequency)
         template_values['key'] = key_funcs.get_private_key(key)
         template_values['wallet'] = self.multisig_address

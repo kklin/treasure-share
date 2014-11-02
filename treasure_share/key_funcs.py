@@ -28,7 +28,7 @@ def get_child(key, n):
   return key.child(n)
 
 def get_private_key(key):
-  return key.to_extended_key(include_prv=True)
+  return key.to_extended_key(include_prv=key.prvkey())
 
 def get_public_key(key):
   return key.to_extended_key()
