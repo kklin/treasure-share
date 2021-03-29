@@ -6,7 +6,7 @@ Landscape-Client==14.01
 MarkupSafe==0.23
 PAM==0.4.2
 PyYAML==3.11
-Pygments==1.6
+Pygments==2.7.4
 Pyste==0.9.10
 Twisted-Core==14.0.2
 Werkzeug==0.8.3
