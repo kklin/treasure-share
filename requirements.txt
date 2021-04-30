@@ -40,7 +40,7 @@ python-dateutil==2.2
 python-debian==0.1.22
 python-gflags==2.0
 requests==1.2.0
-rsa==3.1.4
+rsa==4.7
 service-identity==1.0.0
 six==1.8.0
 ssh-import-id==3.21
