@@ -12,7 +12,7 @@ Twisted-Core==14.0.2
 Werkzeug==0.8.3
 argparse==1.2.1
 base58==0.2.1
-certifi==14.05.14
+certifi==2022.12.7
 characteristic==0.1.0
 chardet==2.2.1
 cloud-init==0.7.6
